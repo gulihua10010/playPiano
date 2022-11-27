@@ -10,7 +10,7 @@ import javazoom.jl.player.Player;
 
 public class Audio
 {
-    private static InputStream is;
+    private InputStream is;
     private Player player;
     ExecutorService service = Executors.newCachedThreadPool();
 
