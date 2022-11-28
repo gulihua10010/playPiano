@@ -32,7 +32,7 @@ public class NotePlayTest {
             in.close();
         }
 
-        if (!StringUtils.hasLength(note) && !StringUtils.hasLength(accompaniment)) {
+        if (!StringUtils.hasLength(note) || !StringUtils.hasLength(accompaniment)) {
             System.out.println("note or accompanies 为空");
             return;
         }
