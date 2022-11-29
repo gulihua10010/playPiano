@@ -2,6 +2,8 @@ package cn.jianwoo.play;
 
 import cn.hutool.core.io.FileUtil;
 
+import java.util.Map;
+
 /**
  * @author gulihua
  * @Description
@@ -82,6 +84,25 @@ public class AudioPlay extends Thread
         this.times = times;
     }
 
+    /**
+     * 播放音符
+     * @param note
+     */
+    private void play(String note, int times) throws InterruptedException {
+        // 0是延音
+        if ("0".equals(note)) {
+            sleep(times / 2);
+        }
+
+        Map<String, String> map = Note2Sound.map;
+        if (map.containsKey(note)) {
+            new Audio(map.get(note)).start();
+            sleep(times / 2);
+        }
+
+        sleep(times / 2);
+    }
+
 
     @Override
     public void run()
@@ -96,155 +117,7 @@ public class AudioPlay extends Thread
                 if (notes[i].length()<1){
                     continue;
                 }
-                switch (notes[i])
-                {
-                case "1--":
-                    new Audio("audio/ll1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2--":
-                    new Audio("audio/ll2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3--":
-                    new Audio("audio/ll3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4--":
-                    new Audio("audio/ll4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5--":
-                    new Audio("audio/ll5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6--":
-                    new Audio("audio/ll6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7--":
-                    new Audio("audio/ll7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1-":
-                    new Audio("audio/l1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2-":
-                    new Audio("audio/l2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3-":
-                    new Audio("audio/l3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4-":
-                    new Audio("audio/l4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5-":
-                    new Audio("audio/l5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6-":
-                    new Audio("audio/l6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7-":
-                    new Audio("audio/l7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1":
-                    new Audio("audio/m1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2":
-                    new Audio("audio/m2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3":
-                    new Audio("audio/m3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4":
-                    new Audio("audio/m4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5":
-                    new Audio("audio/m5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6":
-                    new Audio("audio/m6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7":
-                    new Audio("audio/m7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1+":
-                    new Audio("audio/h1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2+":
-                    new Audio("audio/h2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3+":
-                    new Audio("audio/h3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4+":
-                    new Audio("audio/h4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5+":
-                    new Audio("audio/h5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6+":
-                    new Audio("audio/h6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7+":
-                    new Audio("audio/h7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1++":
-                    new Audio("audio/hh1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2++":
-                    new Audio("audio/hh2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3++":
-                    new Audio("audio/hh3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4++":
-                    new Audio("audio/hh4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5++":
-                    new Audio("audio/hh5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6++":
-                    new Audio("audio/hh6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7++":
-                    new Audio("audio/hh7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "0":
-                    sleep(times / 2);
-                    break;
-                default:
-                    continue;
-                }
-                sleep(times / 2);
+                play(notes[i], times);
                 times = this.times;
             }
 
