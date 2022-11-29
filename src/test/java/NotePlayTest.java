@@ -32,8 +32,8 @@ public class NotePlayTest {
             in.close();
         }
 
-        if (!StringUtils.hasLength(note) || !StringUtils.hasLength(accompaniment)) {
-            System.out.println("note or accompanies 为空");
+        if (!StringUtils.hasLength(note) && !StringUtils.hasLength(accompaniment)) {
+            System.out.println("note and accompanies 为空");
             return;
         }
 
@@ -44,7 +44,6 @@ public class NotePlayTest {
         ap1.start();
         ap2.start();
         an.start();
-
 
     }
 
