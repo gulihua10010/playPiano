@@ -1,5 +1,6 @@
 package cn.jianwoo.play;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,8 +15,10 @@ public class Audio
     private Player player;
     ExecutorService service = Executors.newCachedThreadPool();
 
-    public Audio(String path)
+    public Audio(String name)
     {
+        String path = ResourceUtil.getResource("pianoKey").getPath() + File.separator;
+        path = path + name + ".mp3";
         is = ResourceUtil.getStream(path);
         try
         {
@@ -35,7 +38,7 @@ public class Audio
             {
                 player.play();
             }
-            catch (JavaLayerException e)
+            catch (Exception e)
             {
 
             }

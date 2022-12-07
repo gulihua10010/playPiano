@@ -1,7 +1,7 @@
 package cn.jianwoo.test;
 
-import cn.jianwoo.play.Animation;
-import cn.jianwoo.play.AudioPlay;
+import cn.jianwoo.covert.Convert;
+import cn.jianwoo.play.AudioPlayOld;
 
 import java.io.File;
 
@@ -12,8 +12,6 @@ import java.io.File;
  */
 public class Test1 {
     public static void main(String[] args) {
-        String path =
-                new File("").getAbsolutePath() + File.separator + "src/main/resources/notes" + File.separator;
         String notes =
                 " 7-  1   2   3   0   5-  5   3   0   0   0   0   0   0   0   0 \n" +
                         " 7-  1   2   3   0   5-  5   3   2   3   1   2   7-  1   5-  0 \n" +
@@ -158,9 +156,7 @@ public class Test1 {
                         " 5-- 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 \n" +
                         " 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 \n" +
                         " 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   ";
+        new AudioPlayOld(180).loadNotes(Convert.convert(notes + note1)).start();
 
-        new AudioPlay(180).loadNotes(notes + note1).start();
-        new AudioPlay(180).loadNotes(accompaniments + accompaniments1).start();
-        new Animation(180).loadNotes(notes + note1).start();
     }
 }

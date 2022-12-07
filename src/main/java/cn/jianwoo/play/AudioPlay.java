@@ -1,6 +1,9 @@
 package cn.jianwoo.play;
 
-import cn.hutool.core.io.FileUtil;
+import cn.jianwoo.bo.CurInfoBO;
+import cn.jianwoo.bo.NoteBO;
+
+import java.util.List;
 
 /**
  * @author gulihua
@@ -10,76 +13,54 @@ import cn.hutool.core.io.FileUtil;
 public class AudioPlay extends Thread
 {
     /** 音符 */
-    private String[] notes;
-    /** 间隔时间（单位：毫秒） */
-    private int times;
+    private List<NoteBO> noteList;
     /** 模式 */
-    private Mode mode;
+    private NoteBO.Mode mode;
 
-    public AudioPlay(String[] notes, int times)
+    private CurInfoBO curInfo;
+
+    public AudioPlay(List<NoteBO> noteList)
     {
-        this.notes = notes;
-        this.times = times;
+        this.noteList = noteList;
     }
 
 
-    public AudioPlay(String[] notes, int times, Mode mode)
+    public AudioPlay(List<NoteBO> noteList, NoteBO.Mode mode)
     {
-        this.notes = notes;
-        this.times = times;
+        this.noteList = noteList;
         this.mode = mode;
     }
 
-    public AudioPlay(String filePath, int times)
+
+    public AudioPlay(List<NoteBO> noteList, NoteBO.Mode mode, CurInfoBO curInfo)
     {
-        String content = FileUtil.readString(filePath,"UTF-8");
-        this.notes = content.split(" ");
-        this.times = times;
+        this.noteList = noteList;
+        this.mode = mode;
+        this.curInfo = curInfo;
     }
 
-    public AudioPlay(int times)
-    {
-        this.times = times;
-    }
 
-    public Mode getMode()
+    public NoteBO.Mode getMode()
     {
         return this.mode;
     }
 
 
-    public void setMode(Mode mode)
+    public void setMode(NoteBO.Mode mode)
     {
         this.mode = mode;
     }
 
 
-    public String[] getNotes()
+    public List<NoteBO> getNoteList()
     {
-        return this.notes;
+        return this.noteList;
     }
 
 
-    public void setNotes(String[] notes)
+    public void setNoteList(List<NoteBO> noteList)
     {
-        this.notes = notes;
-    }
-    public AudioPlay loadNotes(String notes)
-    {
-        this.notes = notes.split(" ");
-        return this;
-    }
-
-
-    public int getTimes()
-    {
-        return this.times;
-    }
-
-
-    public void setTimes(int times)
-    {
-        this.times = times;
+        this.noteList = noteList;
     }
 
 
@@ -88,164 +69,46 @@ public class AudioPlay extends Thread
     {
         try
         {
-            int times = this.times;
-            new Audio("audio/test.mp3").start();
-            sleep(1000);
-            for (int i = 0; i < notes.length; i++)
+            new Audio("test").start();
+            sleep(2500);
+            for (NoteBO note : noteList)
             {
-                if (notes[i].length()<1){
-                    continue;
-                }
-                switch (notes[i])
+                if (0 == note.getTime())
                 {
-                case "1--":
-                    new Audio("audio/ll1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2--":
-                    new Audio("audio/ll2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3--":
-                    new Audio("audio/ll3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4--":
-                    new Audio("audio/ll4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5--":
-                    new Audio("audio/ll5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6--":
-                    new Audio("audio/ll6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7--":
-                    new Audio("audio/ll7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1-":
-                    new Audio("audio/l1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2-":
-                    new Audio("audio/l2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3-":
-                    new Audio("audio/l3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4-":
-                    new Audio("audio/l4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5-":
-                    new Audio("audio/l5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6-":
-                    new Audio("audio/l6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7-":
-                    new Audio("audio/l7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1":
-                    new Audio("audio/m1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2":
-                    new Audio("audio/m2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3":
-                    new Audio("audio/m3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4":
-                    new Audio("audio/m4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5":
-                    new Audio("audio/m5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6":
-                    new Audio("audio/m6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7":
-                    new Audio("audio/m7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1+":
-                    new Audio("audio/h1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2+":
-                    new Audio("audio/h2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3+":
-                    new Audio("audio/h3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4+":
-                    new Audio("audio/h4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5+":
-                    new Audio("audio/h5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6+":
-                    new Audio("audio/h6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7+":
-                    new Audio("audio/h7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "1++":
-                    new Audio("audio/hh1.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "2++":
-                    new Audio("audio/hh2.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "3++":
-                    new Audio("audio/hh3.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "4++":
-                    new Audio("audio/hh4.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "5++":
-                    new Audio("audio/hh5.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "6++":
-                    new Audio("audio/hh6.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "7++":
-                    new Audio("audio/hh7.mp3").start();
-                    sleep(times / 2);
-                    break;
-                case "0":
-                    sleep(times / 2);
-                    break;
-                default:
                     continue;
                 }
-                sleep(times / 2);
-                times = this.times;
+                long start = System.currentTimeMillis();
+                int time = note.getTime();
+                if (NoteBO.Mode.MAIN.equals(this.getMode()))
+                {
+                    this.curInfo.setCurrentTime(note.getStartTime());
+                }
+                if (note.getValue() != 0)
+                {
+                    new Audio(note.getNote()).start();
+                    if (note.getIsMuleNotes())
+                    {
+                        // 支持单轨道多音符
+                        for (NoteBO.MergeNote m : note.getMergeVals())
+                        {
+                            new Audio(m.getNote()).start();
+                        }
+
+                    }
+
+                }
+                long end = System.currentTimeMillis();
+//                // 时间偏移量校准
+                if (end - start < time)
+                {
+                    time = (int) (time - (end - start));
+                }
+                else
+                {
+                    System.err.printf("time out, time = %d, cost = %d%n", time, (end - start));
+                }
+
+                sleep(time);
             }
 
         }
@@ -256,11 +119,4 @@ public class AudioPlay extends Thread
 
     }
 
-    enum Mode {
-        /** 主奏 */
-        MAIN,
-        /** 伴奏 */
-        ACCOMPANIMENTS
-
-    }
 }
