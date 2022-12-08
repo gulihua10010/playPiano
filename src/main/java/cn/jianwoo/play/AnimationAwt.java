@@ -18,6 +18,7 @@ import cn.jianwoo.util.ReadXmlAsNoteUtil;
  * @Description
  * @date 2022-12-02 17:20
  */
+@Deprecated
 public class AnimationAwt extends Thread
 {
     public static final int WIDTH = 1200;

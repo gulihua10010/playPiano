@@ -7,6 +7,7 @@ import cn.hutool.core.io.FileUtil;
  * @Description
  * @date 2022-11-12 18:24
  */
+@Deprecated
 public class AudioPlayOld extends Thread
 {
     /** 音符 */
