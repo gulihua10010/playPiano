@@ -13,7 +13,7 @@ public class Audio
 {
     private static InputStream is;
     private Player player;
-    ExecutorService service = Executors.newCachedThreadPool();
+    private static ExecutorService service = Executors.newCachedThreadPool();
 
     public Audio(String name)
     {
