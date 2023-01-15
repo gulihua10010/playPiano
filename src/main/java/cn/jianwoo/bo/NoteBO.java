@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import cn.hutool.core.util.StrUtil;
+import javafx.scene.control.Button;
 
 /**
  * 音符实体类
@@ -63,6 +64,9 @@ public class NoteBO implements Serializable
     /** 音符模式 */
     private Mode mode;
 
+    /** 音符组件对象 */
+    private Button node;
+
     public NoteBO()
     {
         this.mergeVals = new ArrayList<>();
@@ -114,12 +118,8 @@ public class NoteBO implements Serializable
 
     public void init()
     {
-        BigDecimal dur = new BigDecimal(this.getDuration().toString());
-        this.time = dur.divide(new BigDecimal("0.0625"), 6, RoundingMode.HALF_UP).multiply(new BigDecimal("180"))
-                .intValue();
-        BigDecimal u = new BigDecimal(this.getUnit().toString());
-        this.unitTime = u.divide(new BigDecimal("0.0625"), 6, RoundingMode.HALF_UP).multiply(new BigDecimal("180"))
-                .intValue();
+        this.time = calcTime(this.getDuration()).intValue();
+        this.unitTime = calcTime(this.getUnit()).intValue();
         if (StrUtil.isBlank(this.getNote()))
         {
             this.setNote(generateNote(this.getValue()));
@@ -129,10 +129,17 @@ public class NoteBO implements Serializable
             this.setValue(parseNote(this.getNote()));
         }
         this.setMultiple(this.getDuration() / this.getUnit());
+        this.setEndTime(this.getStartTime() + this.getDuration());
     }
 
 
-    private static String generateNote(int note)
+    public static String generateId(Double startTime, int value)
+    {
+        return startTime.toString().replace(".", "_").concat("__").concat(String.valueOf(value));
+    }
+
+
+    public static String generateNote(int note)
     {
         String[] notes = { "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B" };
         String n;
@@ -167,7 +174,28 @@ public class NoteBO implements Serializable
     }
 
 
-    private static int parseNote(String note)
+    /**
+     * 时间转换(音谱里的时间轴转换为毫秒)
+     * 
+     * @param t 音谱里的时间
+     * @date 17:33 2023/1/2
+     * @author gulihua
+     *
+     * @return 毫秒
+     **/
+    public static Double calcTime(Double t)
+    {
+        if (t == null)
+        {
+            return 0d;
+        }
+        BigDecimal dur = new BigDecimal(t.toString());
+        return dur.divide(new BigDecimal("0.0625"), 6, RoundingMode.HALF_UP).multiply(new BigDecimal("180"))
+                .doubleValue();
+    }
+
+
+    public static int parseNote(String note)
     {
         if ("R".equals(note)) return 0;
 
@@ -339,6 +367,31 @@ public class NoteBO implements Serializable
         ACCOMPANIMENTS
 
     }
+
+    public NoteBO(Mode mode, Button node)
+    {
+        this.mode = mode;
+        this.node = node;
+    }
+
+
+//
+    public NoteBO(Mode mode, Button node, Double startTime)
+    {
+        this.mode = mode;
+        this.node = node;
+        this.startTime = startTime;
+    }
+
+
+    public NoteBO(Mode mode, int value, Button node, Double startTime)
+    {
+        this.mode = mode;
+        this.value = value;
+        this.node = node;
+        this.startTime = startTime;
+    }
+
 
     public String getId()
     {
@@ -541,5 +594,17 @@ public class NoteBO implements Serializable
     public void setExtendNoteList(List<NoteBO> extendNoteList)
     {
         this.extendNoteList = extendNoteList;
+    }
+
+
+    public Button getNode()
+    {
+        return this.node;
+    }
+
+
+    public void setNode(Button node)
+    {
+        this.node = node;
     }
 }

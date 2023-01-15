@@ -10,13 +10,19 @@ import cn.hutool.core.lang.Filter;
 import cn.jianwoo.bo.NoteBO;
 
 /**
+ * 音符工具类
+ * 
  * @author gulihua
- * @Description
  * @date 2022-12-05 18:16
  */
-public class SortNoteUtil
+public class NoteUtil
 {
-
+    /***
+     * 多个音符集合按照时间轴合并
+     * 
+     * @param noteList 音符集合
+     * @return 合并后的新集合
+     */
     public static List<NoteBO> processMergeNoteBo(List<NoteBO> noteList)
     {
         noteList.sort(Comparator.comparing(NoteBO::getStartTime));
@@ -28,7 +34,6 @@ public class SortNoteUtil
             // 禁止污染源对象!
             NoteBO newNoteBO = new NoteBO();
             BeanUtil.copyProperties(noteBO, newNoteBO);
-            newNoteBO.setId(String.valueOf(k++));
             if (i < noteList.size() - 1)
             {
                 int j = i + 1;
@@ -94,16 +99,85 @@ public class SortNoteUtil
             }
 
         }
-        if (CollUtil.isNotEmpty(noteBO.getMergeVals()))
-        {
-            int t = 0;
-            for (NoteBO.MergeNote mergeNote : noteBO.getMergeVals())
-            {
-                mergeNote.setId(noteBO.getId() + "_" + t++);
-            }
-        }
         noteBO.setValue(list.get(0).getValue());
         noteBO.setNote(list.get(0).getNote());
         noteBO.setNoteLength(list.get(0).getNoteLength());
+        noteBO.setMode(list.get(0).getMode());
+    }
+
+
+    /**
+     * 标记音符的伴奏和主奏
+     * 
+     * @param noteList 音符集合
+     * @author gulihua
+     **/
+    public static void processMarkAcc(List<NoteBO> noteList)
+    {
+        int minVal = 47;
+        List<NoteBO> accNoteList_ = new ArrayList<NoteBO>();
+        for (NoteBO noteBO : noteList)
+        {
+            if (CollUtil.isEmpty(noteBO.getMergeVals()))
+            {
+                continue;
+            }
+            noteBO.setMode(NoteBO.Mode.MAIN);
+            if (noteBO.getValue() <= minVal)
+            {
+                noteBO.setMode(NoteBO.Mode.ACCOMPANIMENTS);
+            }
+            for (NoteBO.MergeNote member : noteBO.getMergeVals())
+            {
+                member.setMode(NoteBO.Mode.MAIN);
+                if (member.getValue() <= minVal)
+                {
+                    member.setMode(NoteBO.Mode.ACCOMPANIMENTS);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 根据音谱时间轴获取所在索引
+     * 
+     * @param noteList 音符集合
+     * @param startTime 时间轴的某一点时间
+     * @date 00:09 2023/1/3
+     * @author gulihua
+     *
+     * @return 索引, 若为-1 则表示未找到
+     **/
+    public static int findTime(List<NoteBO> noteList, Double startTime, Callback<NoteBO> callback)
+    {
+        int startIdx = 0;
+        int endIdx = noteList.size() - 1;
+        int midIdx = (startIdx + endIdx) / 2;
+        do
+        {
+            if (startTime < noteList.get(midIdx).getStartTime())
+            {
+                endIdx = midIdx - 1;
+                midIdx = (startIdx + endIdx) / 2;
+            }
+            else if (startTime >= noteList.get(midIdx).getEndTime())
+            {
+                startIdx = midIdx + 1;
+                midIdx = (startIdx + endIdx) / 2;
+            }
+            if (startIdx > endIdx)
+            {
+                break;
+            }
+        }
+        while (!(startTime >= noteList.get(midIdx).getStartTime() && startTime < noteList.get(midIdx).getEndTime()));
+        if (startIdx <= endIdx)
+        {
+            noteList.get(midIdx).setSequence(midIdx);
+            callback.call(noteList.get(midIdx));
+            return midIdx;
+        }
+        return -1;
     }
 }

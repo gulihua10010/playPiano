@@ -1,0 +1,119 @@
+.icon-button-pause {
+    -icon-paint: black;
+    -fx-background-color: -icon-paint;
+    -fx-content-display: graphic-only;
+    -size: 24;
+    -fx-min-height: -size;
+    -fx-min-width: -size;
+    -fx-max-height: -size;
+    -fx-max-width: -size;
+
+    -fx-shape: "M512 1024C228.266667 1024 0 795.733333 0 512S228.266667 0 512 0s512 228.266667 512 512-228.266667 512-512 512z m0-42.666667c260.266667 0 469.333333-209.066667 469.333333-469.333333S772.266667 42.666667 512 42.666667 42.666667 251.733333 42.666667 512s209.066667 469.333333 469.333333 469.333333z m-106.666667-682.666666c12.8 0 21.333333 8.533333 21.333334 21.333333v384c0 12.8-8.533333 21.333333-21.333334 21.333333s-21.333333-8.533333-21.333333-21.333333V320c0-12.8 8.533333-21.333333 21.333333-21.333333z m213.333334 0c12.8 0 21.333333 8.533333 21.333333 21.333333v384c0 12.8-8.533333 21.333333-21.333333 21.333333s-21.333333-8.533333-21.333334-21.333333V320c0-12.8 8.533333-21.333333 21.333334-21.333333z";
+}
+
+.icon-button-pause:pressed:hover {
+    -icon-paint: #20B2AA;
+}
+.icon-button-pause:hover {
+    -icon-paint: #555;
+}
+
+.icon-button-play {
+    -icon-paint: black;
+    -fx-background-color: -icon-paint;
+    -fx-content-display: graphic-only;
+    -size: 24;
+    -fx-min-height: -size;
+    -fx-min-width: -size;
+    -fx-max-height: -size;
+    -fx-max-width: -size;
+
+    -fx-shape: "M512 0C230.4 0 0 230.4 0 512s230.4 512 512 512 512-230.4 512-512S793.6 0 512 0z m0 981.333333C253.866667 981.333333 42.666667 770.133333 42.666667 512S253.866667 42.666667 512 42.666667s469.333333 211.2 469.333333 469.333333-211.2 469.333333-469.333333 469.333333z M672 441.6l-170.666667-113.066667c-57.6-38.4-106.666667-12.8-106.666666 57.6v256c0 70.4 46.933333 96 106.666666 57.6l170.666667-113.066666c57.6-42.666667 57.6-106.666667 0-145.066667z";
+
+}
+
+.icon-button-play:pressed:hover {
+    -icon-paint: #20B2AA;
+}
+.icon-button-play:hover {
+    -icon-paint: #555;
+}
+
+.MAIN{
+    -fx-background-color: #20B2AA;
+    -fx-fill-height: 10px;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-label-padding: 0;
+    /*-fx-background-radius: 0;*/
+    -fx-border-radius: 0;
+
+}
+
+.ACCOMPANIMENTS{
+    -fx-background-color: rgb(147, 143, 234,.5);
+    -fx-fill-height: 10px;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-label-padding: 0;
+    /*-fx-background-radius: 0;*/
+    -fx-border-radius: 0;
+
+}
+.MAIN:pressed:hover {
+    -fx-background-color: #2c8580;
+}
+.MAIN:hover {
+    -fx-background-color: #2c8580;
+}
+.ACCOMPANIMENTS:pressed:hover {
+    -fx-background-color: rgb(147, 143, 234);
+}
+.ACCOMPANIMENTS:hover {
+    -fx-background-color: rgb(147, 143, 234);
+}
+
+
+.piano-white-key{
+    -fx-background-color: white;
+    -fx-border-color: BLACK;
+    -fx-padding: 0;
+    -fx-border-width: 1 1 0.5 1;
+    -fx-label-padding: 0;
+    /*-fx-background-radius: 0;*/
+    -fx-border-radius: 2;
+}
+.piano-black-key{
+    -fx-background-color: BLACK;
+    -fx-padding: 0;
+    -fx-border-width: 1;
+    -fx-label-padding: 0;
+    /*-fx-background-radius: 0;*/
+    -fx-border-radius: 2;
+
+}
+.piano-black-key:hover {
+    -fx-background-color: #111;
+}
+.piano-white-key:hover {
+    -fx-background-color: #eee;
+}
+.piano-black-key:pressed:hover {
+    -fx-background-color: #333;
+}
+.piano-white-key:pressed:hover {
+    -fx-background-color: #ccc;
+}
+.piano-white-key-hover{
+    -fx-background-color: #ccc;
+    animation: hover;
+}
+.piano-black-key-hover{
+    -fx-background-color: #666;
+}
+
+.glow {
+
+    -fx-effect: dropshadow( three-pass-box , #2c8580 , 12, 0.2 , 1 , 1);
+}
+
