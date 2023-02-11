@@ -50,11 +50,11 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.soundlibs</groupId>
-            <artifactId>mp3spi</artifactId>
-            <version>1.9.5.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.googlecode.soundlibs</groupId>-->
+<!--            <artifactId>mp3spi</artifactId>-->
+<!--            <version>1.9.5.4</version>-->
+<!--        </dependency>-->
 
         <!-- 如果需要解码播放flac文件则引入这个jar包 -->
         <dependency>
@@ -134,10 +134,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.googlecode.soundlibs</groupId>-->
+<!--            <artifactId>basicplayer</artifactId>-->
+<!--            <version>3.0.0.0</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>com.googlecode.soundlibs</groupId>
-            <artifactId>basicplayer</artifactId>
-            <version>3.0.0.0</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
         </dependency>
     </dependencies>
 

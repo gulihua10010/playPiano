@@ -73,8 +73,23 @@ public class AudioPlay extends Thread
                 throw new IllegalStateException("请初始化参数curInfo!");
             }
             this.curInfo.addPlayer(this);
-            new Audio("test").start();
-            sleep(2500);
+            try {
+                new Audio("test").start();
+            } catch (Exception ignored) {}
+
+            sleep(1000);
+            if (!this.curInfo.isCompleteReady())
+            {
+                try
+                {
+                    synchronized (this.curInfo.getLock())
+                    {
+                        this.curInfo.getLock().wait();
+                    }
+                }
+                catch (InterruptedException ignored)
+                {}
+            }
             this.curInfo.setTimestamp(System.currentTimeMillis());
             this.totalTime = 0;
             for (; this.index < this.noteList.size(); this.index++)
@@ -95,20 +110,20 @@ public class AudioPlay extends Thread
 
                 if (note.getValue() != 0)
                 {
-                    new Audio(note.getNote()).start();
+                    new Audio(note.getNote(), mode).start();
                     if (note.getIsMuleNotes())
                     {
                         // 支持单轨道多音符
                         for (NoteBO.MergeNote m : note.getMergeVals())
                         {
-                            new Audio(m.getNote()).start();
+                            new Audio(m.getNote(), mode).start();
                         }
 
                     }
 
                 }
-                System.out.println("P_" + note.getMode() + ", " + note.getStartTime() + ", " + note.getValue() + ", "
-                        + (start - this.curInfo.getTimestamp()) + ", " + totalTime);
+//                System.out.println("P_" + note.getMode() + ", " + note.getStartTime() + ", " + note.getValue() + ", "
+//                        + (start - this.curInfo.getTimestamp()) + ", " + totalTime);
                 int cost = (int) (start - this.curInfo.getTimestamp());
 
                 long end = System.currentTimeMillis();

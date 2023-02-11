@@ -21,6 +21,9 @@ public class CurInfoBO implements Serializable
     /** 是否暂停 */
     private Boolean isPause;
 
+    /** 是否完成准备 */
+    private Boolean isReady;
+
     /** 锁 */
     private Object lock;
     /** 播放实例 */
@@ -35,6 +38,7 @@ public class CurInfoBO implements Serializable
         this.isDebug = false;
         this.lock = new Object();
         this.threadList = new CopyOnWriteArrayList<>();
+        this.isReady = false;
     }
 
 
@@ -104,13 +108,14 @@ public class CurInfoBO implements Serializable
             {
                 play.tokenDelay();
                 NoteBO noteBO = play.getNote(play.getTmpIdx() + 1);
-                play.setDelayTime(NoteBO.calcTime(noteBO.getEndTime() - maxTime).intValue());
+                play.setDelayTime(NoteBO.calcTime(noteBO.getEndTime() - maxTime, noteBO.getRate()).intValue());
                 play.incrementTmpIdx();
             }
             play.updateIndex(play.getTmpIdx());
 
             // 更新拖动进度条之后的 totalTime
-            play.setTotalTime(NoteBO.calcTime(play.getNote(play.getTmpIdx() + 1).getStartTime()).intValue());
+            play.setTotalTime(NoteBO.calcTime(play.getNote(play.getTmpIdx() + 1).getStartTime(),
+                    play.getNote(play.getTmpIdx() + 1).getRate()).intValue());
             if (i == j)
             {
                 // 拖动进度条时重新计算起始的基准时间
@@ -159,4 +164,21 @@ public class CurInfoBO implements Serializable
         this.timestamp = timestamp;
     }
 
+
+    public Boolean isCompleteReady()
+    {
+        return this.isReady;
+    }
+
+
+    public void completeReady()
+    {
+        this.isReady = true;
+
+        synchronized (this.lock)
+        {
+            this.lock.notifyAll();
+        }
+
+    }
 }

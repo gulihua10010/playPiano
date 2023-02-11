@@ -12,14 +12,14 @@ module cn.jianwoo {
     requires filters;
     requires java.desktop;
     requires jdom;
-    requires jlayer;
     requires org.apache.commons.lang3;
     requires fastjson;
     requires net.sourceforge.lame;
     requires javafx.media;
     requires java.sql;
     requires slf4j.api;
-    requires basicplayer;
+    requires jfugue;
+    requires jlayer.extend;
 
     opens cn.jianwoo.test to javafx.fxml;
     opens cn.jianwoo.play to javafx.fxml;

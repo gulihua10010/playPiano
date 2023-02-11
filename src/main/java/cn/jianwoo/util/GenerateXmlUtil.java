@@ -64,13 +64,32 @@ public class GenerateXmlUtil
      **/
     public void generateNote(List<NoteBO> noteList, String targetFile, String audioName)
     {
+        generateNote(noteList, targetFile, 120, audioName);
+    }
+
+
+    /**
+     * 根据NoteBO集合生成 xml 文件
+     *
+     * @param noteList 音符集合
+     * @param targetFile 输出文件全路径
+     * @param bpm 节奏
+     * @param audioName 音乐名称
+     * @date 22:26 2022/11/30
+     * @author gulihua
+     *
+     * @return
+     * @throws
+     **/
+    public void generateNote(List<NoteBO> noteList, String targetFile, int bpm, String audioName)
+    {
         if (CollUtil.isEmpty(noteList))
         {
             System.err.println("音符集合为空!");
         }
         Document document = new Document();
         createNamespace(document);
-        createHeader(audioName, noteList.get(0).getUnit(), document);
+        createHeader(audioName, noteList.get(0).getUnit(), bpm, document);
         createDetails(noteList, document);
         Format format = Format.getPrettyFormat();
         format.setEncoding("UTF-8");
@@ -119,10 +138,11 @@ public class GenerateXmlUtil
     }
 
 
-    private void createHeader(String audioName, Double unit, Document document)
+    private void createHeader(String audioName, Double unit, int bpm, Document document)
     {
         JDOM_HELPER.setValueToDoc(document, "header.audio.midi.name", audioName);
         JDOM_HELPER.setValueToDoc(document, "header.audio.midi.unit", JDOM_HELPER.formatNumber(unit));
+        JDOM_HELPER.setValueToDoc(document, "header.audio.midi.bpm", String.valueOf(bpm));
 
     }
 

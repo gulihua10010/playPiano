@@ -1,3 +1,23 @@
+## 2.2.0 版本
+1. 新增XML 文件中节奏(BPM)的设置
+2. 新增伴奏音量比主奏略低的功能 (原播放 jar 包从 maven 依赖中移除，使用自己编译的扩展包[jlayer-extend-1.0.2.0-SNAPSHOT.jar]，在 lib 目录下，以支持音量调整)
+3. 新增生成 XML 的功能 (具体步骤见下面的教程)
+4. 上传了一些歌曲的 xml 文件
+5. 优化部分代码逻辑
+6. 修复了一些已知问题
+
+### 生成 XML 文件步骤
+  1. 在网上搜索有关歌曲的 midi 简谱，比如midishow网站(https://www.midishow.com/)
+  2. 使用 midi 编辑器打开midi 文件，比如 Logic Pro，Tune Flow(https://tuneflow.com/), Tune Flow在线也可以编辑，也有多个平台的客户端
+  3. 将 midi 文件删除伴奏轨道，只剩一个主奏轨道，如图(tuneFlow截图 1~2.png)，然后导出 midi
+  4. 然后将主奏文件使用类(cn.jianwoo.genXml.GenStart)生成 xml 文件
+  5. 导出伴奏 xml 文件的方法同理
+  6. 导出后根据BPM，重置 xml 中的header.audio.midi.bpm节点
+
+#### tuneFlow截图 1
+![tuneFlow截图 1](tuneFlow截图 1.png)
+#### tuneFlow截图 2
+![tuneFlow截图 2](tuneFlow截图 2.png)
 ## 2.1.0 版本
 1. 新增暂停/播放按钮
 2. 新增进度条，可拖动

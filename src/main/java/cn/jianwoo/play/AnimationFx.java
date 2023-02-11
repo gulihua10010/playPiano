@@ -69,8 +69,8 @@ public class AnimationFx extends Application implements Runnable
     private int curIdx2;
     /** 指针当前 x 坐标像素位置 */
     private Double pointer = 0d;
-    /**指针组件*/
-    private  Line line;
+    /** 指针组件 */
+    private Line line;
 
     /** 指针移动到的最大宽度 */
     private int maxWidth;
@@ -108,6 +108,8 @@ public class AnimationFx extends Application implements Runnable
 
     /** 是否在拖拽 */
     private boolean isDrag;
+    /** 速率 */
+    private Double rate;
 
     private List<NoteBO> currNoteList;
 
@@ -140,19 +142,22 @@ public class AnimationFx extends Application implements Runnable
     private void setList(List<NoteBO> list)
     {
         this.list = list;
+        if (CollUtil.isNotEmpty(list))
+        {
+            this.rate = list.get(0).getRate();
+            if (this.rate == null)
+            {
+                this.rate = 1D;
+            }
+            System.out.println(rate);
+        }
     }
-
-
-
 
 
     public int getMaxVal()
     {
         return this.maxVal;
     }
-
-
-
 
 
     public boolean getIsDebug()
@@ -225,6 +230,7 @@ public class AnimationFx extends Application implements Runnable
         stage.setOnCloseRequest(event -> {
             System.exit(0);
         });
+        instance.curInfo.completeReady();
 
     }
 
@@ -240,7 +246,7 @@ public class AnimationFx extends Application implements Runnable
         line = new Line(0, 0, 0, WIDTH);
         line.setStroke(Color.GRAY);
         pointPane.getChildren().add(line);
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             Timeline timeline = new Timeline();
             KeyFrame kf = new KeyFrame(Duration.millis(10), event -> {
                 if (curInfo.getTimestamp() == 0 || isPause)
@@ -278,7 +284,6 @@ public class AnimationFx extends Application implements Runnable
             timeline.play();
         });
 
-
         return pointPane;
     }
 
@@ -288,7 +293,6 @@ public class AnimationFx extends Application implements Runnable
      */
     private void createNotePane()
     {
-        System.out.println("createNotePane");
         notePane.setLayoutY(30);
         notePane.setLayoutX(100);
         boolean isFinished = false;
@@ -301,8 +305,8 @@ public class AnimationFx extends Application implements Runnable
                 continue;
             }
 //            System.out.println("<<"+note.getStartTime());
-            Double startTime = (note.getStartTime() - startTime2) * UNIT;
-            Double length = note.getNoteLength() * UNIT;
+            Double startTime = (note.getStartTime() - startTime2) * UNIT * rate;
+            Double length = note.getNoteLength() * UNIT * rate;
             int height = calcHeight(note.getValue());
             // 当当前时间快大于面板宽度时，记录下 list 索引和指针的最大移动位置
             if (!isFinished && startTime > WIDTH - 200)
@@ -344,7 +348,7 @@ public class AnimationFx extends Application implements Runnable
             {
                 for (NoteBO.MergeNote mergeNote : note.getMergeVals())
                 {
-                    length = mergeNote.getNoteLength() * UNIT;
+                    length = mergeNote.getNoteLength() * UNIT * rate;
                     height = calcHeight(mergeNote.getValue());
                     Button btnMerge = new Button();
                     btnMerge.setId(mergeNote.getId());
@@ -539,7 +543,6 @@ public class AnimationFx extends Application implements Runnable
                 }
                 this.isPause = !this.isPause;
 
-
             });
             gridPane.getChildren().add(btn);
 
@@ -548,7 +551,8 @@ public class AnimationFx extends Application implements Runnable
             slider.setLayoutX(350);
             slider.setLayoutY(10);
             gridPane.getChildren().add(slider);
-            double totalTime = NoteBO.calcTime(list.get(list.size() - 1).getEndTime()) / 1000;
+            double totalTime = NoteBO.calcTime(list.get(list.size() - 1).getEndTime(),
+                    list.get(list.size() - 1).getRate()) / 1000;
             // 创建 时间显示器
             Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                 if (curInfo.getTimestamp() > 0 && !curInfo.isPause())
@@ -587,8 +591,8 @@ public class AnimationFx extends Application implements Runnable
                     this.startTime2 = p.getStartTime();
                     this.notePane.getChildren().clear();
                     long now = System.currentTimeMillis();
-                    this.curInfo.setTimestamp(System.currentTimeMillis() -
-                            NoteBO.calcTime(p.getStartTime()).intValue());
+                    this.curInfo.setTimestamp(
+                            System.currentTimeMillis() - NoteBO.calcTime(p.getStartTime(), p.getRate()).intValue());
                     double cost = now - curInfo.getTimestamp();
                     pointer = cost / 180 * 25;
                     this.lastPoint = pointer;
@@ -598,7 +602,7 @@ public class AnimationFx extends Application implements Runnable
                     {
                         log.debug(">>>>>\t\tOnMouseReleased:: mode= {}, startTime= {}", p.getMode(), p.getStartTime());
                     }
-                    System.out.println(">>M_"+p.getMode() +", "+ p.getStartTime());
+                    System.out.println(">>M_" + p.getMode() + ", " + p.getStartTime());
 
                 });
                 this.isDrag = false;

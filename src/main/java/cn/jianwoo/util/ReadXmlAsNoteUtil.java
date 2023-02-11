@@ -55,17 +55,21 @@ public class ReadXmlAsNoteUtil
             byte[] bytes = FileUtil.readBytes(filePath);
             Document document = JDOM_HELPER.build(bytes);
             Double unit = JDOM_HELPER.obtainNumValueFrom(document, "header.audio.midi.unit");
-            return readXml(document, unit, mode);
+            Double bpm = JDOM_HELPER.obtainNumValueFrom(document, "header.audio.midi.bpm");
+            Double rate = 1/bpm/0.006;
+
+            return readXml(document, unit, rate, mode);
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             System.err.println(e);
         }
         return null;
     }
 
 
-    private List<NoteBO> readXml(Document document, Double unit, NoteBO.Mode mode)
+    private List<NoteBO> readXml(Document document, Double unit, Double rate, NoteBO.Mode mode)
     {
         List<NoteBO> list = new ArrayList<NoteBO>();
         String detailNode = "note";
@@ -83,6 +87,7 @@ public class ReadXmlAsNoteUtil
             noteBO.setEndTime(JDOM_HELPER.obtainNumValueFrom(document, detailNode + "(" + i + ").endTime"));
             noteBO.setMultiple(JDOM_HELPER.obtainNumValueFrom(document, detailNode + "(" + i + ").multiple"));
             noteBO.setMode(mode);
+            noteBO.setRate(rate);
             noteBO.init();
             String multNote = "multNote";
             noteBO.setMergeVals(new ArrayList<>());

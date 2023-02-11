@@ -66,6 +66,8 @@ public class NoteBO implements Serializable
 
     /** 音符组件对象 */
     private Button node;
+    /** 播放速率 */
+    private Double rate;
 
     public NoteBO()
     {
@@ -74,6 +76,7 @@ public class NoteBO implements Serializable
         this.isResetTime = false;
         this.isUseDefinedDuration = false;
         this.isMuleNotes = false;
+        this.rate = 1D;
     }
 
 
@@ -118,8 +121,12 @@ public class NoteBO implements Serializable
 
     public void init()
     {
-        this.time = calcTime(this.getDuration()).intValue();
-        this.unitTime = calcTime(this.getUnit()).intValue();
+        if (this.getRate() == null || this.getRate().compareTo(0D) == 0)
+        {
+            this.setRate(1D);
+        }
+        this.time = calcTime(this.getDuration(), this.getRate()).intValue();
+        this.unitTime = calcTime(this.getUnit(), this.getRate()).intValue();
         if (StrUtil.isBlank(this.getNote()))
         {
             this.setNote(generateNote(this.getValue()));
@@ -128,8 +135,13 @@ public class NoteBO implements Serializable
         {
             this.setValue(parseNote(this.getNote()));
         }
+        if (this.getUnit() == null)
+        {
+            this.unit = 0.041666666666666664;
+        }
         this.setMultiple(this.getDuration() / this.getUnit());
         this.setEndTime(this.getStartTime() + this.getDuration());
+
     }
 
 
@@ -178,12 +190,13 @@ public class NoteBO implements Serializable
      * 时间转换(音谱里的时间轴转换为毫秒)
      * 
      * @param t 音谱里的时间
+     * @param rate 速率
      * @date 17:33 2023/1/2
      * @author gulihua
      *
      * @return 毫秒
      **/
-    public static Double calcTime(Double t)
+    public static Double calcTime(Double t, Double rate)
     {
         if (t == null)
         {
@@ -191,7 +204,7 @@ public class NoteBO implements Serializable
         }
         BigDecimal dur = new BigDecimal(t.toString());
         return dur.divide(new BigDecimal("0.0625"), 6, RoundingMode.HALF_UP).multiply(new BigDecimal("180"))
-                .doubleValue();
+                .multiply(new BigDecimal(rate)).doubleValue();
     }
 
 
@@ -606,5 +619,17 @@ public class NoteBO implements Serializable
     public void setNode(Button node)
     {
         this.node = node;
+    }
+
+
+    public Double getRate()
+    {
+        return this.rate;
+    }
+
+
+    public void setRate(Double rate)
+    {
+        this.rate = rate;
     }
 }
