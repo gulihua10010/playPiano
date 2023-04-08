@@ -56,7 +56,11 @@ public class ReadXmlAsNoteUtil
             Document document = JDOM_HELPER.build(bytes);
             Double unit = JDOM_HELPER.obtainNumValueFrom(document, "header.audio.midi.unit");
             Double bpm = JDOM_HELPER.obtainNumValueFrom(document, "header.audio.midi.bpm");
-            Double rate = 1/bpm/0.006;
+            Double rate = 1d;
+            if (bpm != 0)
+            {
+                rate = 1 / bpm / 0.006;
+            }
 
             return readXml(document, unit, rate, mode);
         }

@@ -5,7 +5,7 @@
       <midi>
         <name>test</name>
         <unit>0.04167</unit>
-          <bpm>132</bpm
+          <bpm>132</bpm>
       </midi>
     </audio>
   </header>
